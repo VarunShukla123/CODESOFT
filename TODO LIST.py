@@ -2,13 +2,12 @@
 import tkinter as tk
 from tkinter import messagebox
 root = tk.Tk()
-root.title("To-Do List")
-root.geometry("200*400")
-
+root.title("Simple To-Do List")
+root.geometry("300x420")
 tasks = []
 def add_task():
     task = task_entry.get()
-    if task != "":
+    if task:
         tasks.append(task)
         listbox.insert(tk.END, task)
         task_entry.delete(0, tk.END)
@@ -17,18 +16,18 @@ def add_task():
 def delete_task():
     selected = listbox.curselection()
     if selected:
-        task_index = selected[0]
-        listbox.delete(task_index)
-        tasks.pop(task_index)
+        index = selected[0]
+        listbox.delete(index)
+        tasks.pop(index)
     else:
         messagebox.showwarning("Warning", "Please select a task to delete.")
+def exit_app():
+    root.destroy()
 task_entry = tk.Entry(root, width=30)
 task_entry.pack(pady=10)
-add_btn = tk.Button(root, text="Add Task", command=add_task)
-add_btn.pack(pady=5)
-
+tk.Button(root, text="Add Task", command=add_task).pack(pady=5)
+tk.Button(root, text="Delete Task", command=delete_task).pack(pady=5)
 listbox = tk.Listbox(root, width=30, height=10)
 listbox.pack(pady=10)
-delete_btn = tk.Button(root, text="Delete Task", command=delete_task)
-delete_btn.pack(pady=5)
+tk.Button(root, text="Exit", command=exit_app, fg="white", bg="red").pack(pady=10)
 root.mainloop()
