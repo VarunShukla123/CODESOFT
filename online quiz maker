@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Quiz Maker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+    .quiz-container h1 {
+      text-align: center;
+      color: #333;
+    }
+    .question {
+      font-size: 18px;
+      margin: 20px 0 10px;
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    .options button:hover {
+      background: #0056b3;
+    }
+    .correct {
+      background: #28a745 !important;
+    }
+    .wrong {
+      background: #dc3545 !important;
+    }
+    .result {
+      text-align: center;
+      font-size: 20px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-container">
+    <h1>Online Quiz Maker</h1>
+    <div id="quiz"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "In what year did the Great October Socialist Revolution take place?",
+        options: ["1917", "1923", "1914", "1920"],
+        answer: 0
+      },
+      {
+        question: "What is the largest lake in the world?",
+        options: ["Caspian Sea", "Baikal", "Lake Superior", "Ontario"],
+        answer: 0
+      },
+      {
+        question: "Which planet in the solar system is known as the 'Red Planet'?",
+        options: ["Venus", "Earth", "Mars", "Jupiter"],
+        answer: 2
+      },
+      {
+        question: "Who wrote the novel 'War and Peace'?",
+        options: ["Anton Chekhov", "Fyodor Dostoevsky", "Leo Tolstoy", "Ivan Turgenev"],
+        answer: 2
+      },
+      {
+        question: "What is the capital of Japan?",
+        options: ["Beijing", "Tokyo", "Seoul", "Bangkok"],
+        answer: 1
+      }
+    ];
+
+    const quiz = document.getElementById("quiz");
+    const result = document.getElementById("result");
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      quiz.innerHTML = "";
+      if (currentQuestion < quizData.length) {
+        const qData = quizData[currentQuestion];
+        const questionEl = document.createElement("div");
+        questionEl.classList.add("question");
+        questionEl.innerText = qData.question;
+        quiz.appendChild(questionEl);
+
+        const optionsEl = document.createElement("div");
+        optionsEl.classList.add("options");
+        qData.options.forEach((option, index) => {
+          const btn = document.createElement("button");
+          btn.innerText = option;
+          btn.onclick = () => checkAnswer(btn, index);
+          optionsEl.appendChild(btn);
+        });
+        quiz.appendChild(optionsEl);
+      } else {
+        quiz.innerHTML = "";
+        result.innerHTML = `Your Score: ${score}/${quizData.length}`;
+      }
+    }
+
+    function checkAnswer(button, selected) {
+      const correct = quizData[currentQuestion].answer;
+      const buttons = button.parentNode.querySelectorAll("button");
+
+      buttons.forEach((btn, index) => {
+        btn.disabled = true;
+        if (index === correct) btn.classList.add("correct");
+      });
+
+      if (selected === correct) {
+        score++;
+      } else {
+        button.classList.add("wrong");
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        loadQuestion();
+      }, 1000);
+    }
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>
